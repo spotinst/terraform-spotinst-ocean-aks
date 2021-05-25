@@ -52,7 +52,7 @@ module "ocean-aks" {
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.13.0 |
 | <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | >= 2.55.0 |
-| <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | >= 2.1.0 |
+| <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | >= 2.2.0 |
 | <a name="requirement_spotinst"></a> [spotinst](#requirement\_spotinst) | >= 1.39.0 |
 
 ## Providers
@@ -66,7 +66,7 @@ module "ocean-aks" {
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_aks"></a> [aks](#module\_aks) | ./modules/aks |  |
-| <a name="module_ocean-controller"></a> [ocean-controller](#module\_ocean-controller) | spotinst/ocean-controller/spotinst | >= 0.23.0 |
+| <a name="module_ocean-controller"></a> [ocean-controller](#module\_ocean-controller) | spotinst/ocean-controller/spotinst | >= 0.27.0 |
 | <a name="module_ssh"></a> [ssh](#module\_ssh) | ./modules/ssh |  |
 
 ## Resources

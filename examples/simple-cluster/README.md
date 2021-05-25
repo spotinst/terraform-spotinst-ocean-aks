@@ -17,7 +17,7 @@ To provision this example, run the following from within this directory:
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.13.0 |
 | <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | >= 2.55.0 |
-| <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | >= 2.1.0 |
+| <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | >= 2.2.0 |
 | <a name="requirement_spotinst"></a> [spotinst](#requirement\_spotinst) | >= 1.39.0 |
 
 ## Providers

@@ -7,8 +7,8 @@ resource "spotinst_ocean_aks" "this" {
   acd_identifier          = local.ocean_acd_identifier
   aks_name                = local.ocean_cluster_name
   ssh_public_key          = local.public_ssh_key
+  user_name               = local.username
   aks_resource_group_name = var.resource_group_name
-  user_name               = module.aks.username
 }
 
 resource "spotinst_ocean_aks_virtual_node_group" "this" {

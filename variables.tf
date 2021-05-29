@@ -5,6 +5,12 @@ variable "resource_group_name" {
   description = "The Resource Group name to be imported"
 }
 
+variable "aks_cluster_name" {
+  type        = string
+  description = "The AKS cluster name to be imported"
+  default     = null
+}
+
 variable "prefix" {
   type        = string
   description = "The prefix for the resources created in the specified Azure Resource Group"
@@ -287,6 +293,12 @@ variable "spotinst_token" {
 variable "spotinst_account" {
   type        = string
   description = "Spot account ID"
+}
+
+variable "create_aks" {
+  type        = bool
+  description = "Controls whether AKS cluster should be created (it affects all Azure resources)"
+  default     = true
 }
 
 variable "create_ocean" {

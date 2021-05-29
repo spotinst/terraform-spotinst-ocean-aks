@@ -1,5 +1,6 @@
 module "aks" {
   source = "./modules/aks"
+  count  = var.create_aks ? 1 : 0
 
   admin_username                   = var.admin_username
   agents_availability_zones        = var.agents_availability_zones

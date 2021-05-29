@@ -43,7 +43,8 @@ module "ocean-aks" {
 
 ## Examples
 
-- [Simple Cluster](https://github.com/spotinst/terraform-spotinst-ocean-aks/tree/main/examples/simple-cluster)
+- [Create Cluster](https://github.com/spotinst/terraform-spotinst-ocean-aks/tree/main/examples/create-cluster)
+- [Import Cluster](https://github.com/spotinst/terraform-spotinst-ocean-aks/tree/main/examples/import-cluster)
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
@@ -93,6 +94,7 @@ module "ocean-aks" {
 | <a name="input_agents_tags"></a> [agents\_tags](#input\_agents\_tags) | A mapping of tags to assign to the Node Pool | `map(string)` | `{}` | no |
 | <a name="input_agents_taints"></a> [agents\_taints](#input\_agents\_taints) | List of additional `taint` objects, see: https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/pod#taint | `list(any)` | `[]` | no |
 | <a name="input_agents_type"></a> [agents\_type](#input\_agents\_type) | The type of Node Pool which should be created. Possible values are AvailabilitySet and VirtualMachineScaleSets. Defaults to VirtualMachineScaleSets | `string` | `"VirtualMachineScaleSets"` | no |
+| <a name="input_aks_cluster_name"></a> [aks\_cluster\_name](#input\_aks\_cluster\_name) | The AKS cluster name to be imported | `string` | `null` | no |
 | <a name="input_client_id"></a> [client\_id](#input\_client\_id) | The Client ID (appId) for the Service Principal used for the AKS deployment | `string` | `""` | no |
 | <a name="input_client_secret"></a> [client\_secret](#input\_client\_secret) | The Client Secret (password) for the Service Principal used for the AKS deployment | `string` | `""` | no |
 | <a name="input_cluster_identifier"></a> [cluster\_identifier](#input\_cluster\_identifier) | Cluster identifier | `string` | `null` | no |
@@ -106,6 +108,7 @@ module "ocean-aks" {
 | <a name="input_controller_resources_limits"></a> [controller\_resources\_limits](#input\_controller\_resources\_limits) | Definition of the maximum amount of compute resources allowed | `map(any)` | `null` | no |
 | <a name="input_controller_resources_requests"></a> [controller\_resources\_requests](#input\_controller\_resources\_requests) | Definition of the minimum amount of compute resources required | `map(any)` | `null` | no |
 | <a name="input_controller_tolerations"></a> [controller\_tolerations](#input\_controller\_tolerations) | List of additional `toleration` objects, see: https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/pod#toleration | `list(any)` | <pre>[<br>  {<br>    "effect": "NoExecute",<br>    "key": "node.kubernetes.io/not-ready",<br>    "operator": "Exists",<br>    "toleration_seconds": 150<br>  },<br>  {<br>    "effect": "NoExecute",<br>    "key": "node.kubernetes.io/unreachable",<br>    "operator": "Exists",<br>    "toleration_seconds": 150<br>  }<br>]</pre> | no |
+| <a name="input_create_aks"></a> [create\_aks](#input\_create\_aks) | Controls whether AKS cluster should be created (it affects all Azure resources) | `bool` | `true` | no |
 | <a name="input_create_ocean"></a> [create\_ocean](#input\_create\_ocean) | Controls whether Ocean should be created (it affects all Ocean resources) | `bool` | `true` | no |
 | <a name="input_enable_auto_scaling"></a> [enable\_auto\_scaling](#input\_enable\_auto\_scaling) | Enable built-in node pool autoscaling | `bool` | `false` | no |
 | <a name="input_enable_azure_policy"></a> [enable\_azure\_policy](#input\_enable\_azure\_policy) | Enable Azure Policy Addon | `bool` | `false` | no |

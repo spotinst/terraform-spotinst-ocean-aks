@@ -1,6 +1,15 @@
 locals {
-  ocean_cluster_id   = element(concat(spotinst_ocean_aks.this.*.id, [""]), 0)
-  ocean_cluster_name = "${var.prefix}-aks"
+  ocean_cluster_name = (
+    var.create_aks
+    ? "${var.prefix}-aks"
+    : var.aks_cluster_name
+  )
+
+  ocean_cluster_id = (
+    var.create_ocean
+    ? spotinst_ocean_aks.this[0].id
+    : null
+  )
 
   ocean_controller_cluster_id = (
     var.cluster_identifier != null
@@ -25,5 +34,14 @@ locals {
     var.public_ssh_key == ""
     ? module.ssh.public_ssh_key
     : var.public_ssh_key, "\n", "")
+  )
+
+  username = (
+    var.create_aks
+    ? (
+      length(module.aks[0].admin_username) > 0
+      ? module.aks[0].admin_username
+      : module.aks[0].username
+    ) : var.admin_username
   )
 }

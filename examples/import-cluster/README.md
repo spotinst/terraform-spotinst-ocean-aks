@@ -1,6 +1,6 @@
-# Simple Cluster
+# Import Cluster
 
-This example illustrates how to create a simple cluster.
+This example illustrates how an AKS cluster can be used to create an Ocean cluster.
 
 ## Usage
 
@@ -36,14 +36,13 @@ To provision this example, run the following from within this directory:
 
 | Name | Type |
 |------|------|
-| [azurerm_resource_group.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) | resource |
+| [azurerm_kubernetes_cluster.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/kubernetes_cluster) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_location"></a> [location](#input\_location) | The Azure region where the Resource Group should exist | `string` | n/a | yes |
-| <a name="input_prefix"></a> [prefix](#input\_prefix) | The prefix for the resources created in the specified Azure Resource Group | `string` | n/a | yes |
+| <a name="input_aks_cluster_name"></a> [aks\_cluster\_name](#input\_aks\_cluster\_name) | The AKS cluster name to be imported | `string` | n/a | yes |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The Resource Group name to be imported | `string` | n/a | yes |
 | <a name="input_spotinst_account"></a> [spotinst\_account](#input\_spotinst\_account) | Spot account ID | `string` | n/a | yes |
 | <a name="input_spotinst_token"></a> [spotinst\_token](#input\_spotinst\_token) | Spot Personal Access token | `string` | n/a | yes |

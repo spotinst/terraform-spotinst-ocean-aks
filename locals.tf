@@ -1,6 +1,6 @@
 locals {
   ocean_cluster_name = (
-    var.create_aks
+    var.aks_cluster_name == null
     ? "${var.prefix}-aks"
     : var.aks_cluster_name
   )

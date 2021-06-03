@@ -2,15 +2,27 @@
 // Use of this source code is governed by an MIT license that
 // can be found in the LICENSE file.
 
-// Code copied from @Azure/terraform-azurerm-aks (v4.8.0). DO NOT EDIT.
+// Code copied from @Azure/terraform-azurerm-aks (v4.12.0). DO NOT EDIT.
 
 variable "resource_group_name" {
   description = "The resource group name to be imported"
   type        = string
 }
 
+variable "cluster_name" {
+  description = "(Optional) The name for the AKS resources created in the specified Azure Resource Group. This variable overwrites the 'prefix' var (The 'prefix' var will still be applied to the dns_prefix if it is set)"
+  type        = string
+  default     = null
+}
+
+variable "cluster_log_analytics_workspace_name" {
+  description = "(Optional) The name of the Analytics workspace"
+  type        = string
+  default     = null
+}
+
 variable "prefix" {
-  description = "The prefix for the resources created in the specified Azure Resource Group"
+  description = "(Required) The prefix for the resources created in the specified Azure Resource Group"
   type        = string
 }
 
@@ -263,5 +275,17 @@ variable "agents_tags" {
 variable "agents_max_pods" {
   description = "(Optional) The maximum number of pods that can run on each agent. Changing this forces a new resource to be created"
   type        = number
+  default     = null
+}
+
+variable "identity_type" {
+  description = "(Optional) The type of identity used for the managed cluster. Conflict with `client_id` and `client_secret`. Possible values are `SystemAssigned` and `UserAssigned`. If `UserAssigned` is set, a `user_assigned_identity_id` must be set as well"
+  type        = string
+  default     = "SystemAssigned"
+}
+
+variable "user_assigned_identity_id" {
+  description = "(Optional) The ID of a user assigned identity"
+  type        = string
   default     = null
 }

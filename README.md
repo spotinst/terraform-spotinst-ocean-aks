@@ -60,15 +60,15 @@ module "ocean-aks" {
 
 | Name | Version |
 |------|---------|
-| <a name="provider_spotinst"></a> [spotinst](#provider\_spotinst) | ~> 1.44 |
+| <a name="provider_spotinst"></a> [spotinst](#provider\_spotinst) | 1.44.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_aks"></a> [aks](#module\_aks) | ./modules/aks |  |
+| <a name="module_aks"></a> [aks](#module\_aks) | ./modules/aks | n/a |
 | <a name="module_ocean-controller"></a> [ocean-controller](#module\_ocean-controller) | spotinst/ocean-controller/spotinst | ~> 0.28 |
-| <a name="module_ssh"></a> [ssh](#module\_ssh) | ./modules/ssh |  |
+| <a name="module_ssh"></a> [ssh](#module\_ssh) | ./modules/ssh | n/a |
 
 ## Resources
 
@@ -84,7 +84,7 @@ module "ocean-aks" {
 | <a name="input_acd_identifier"></a> [acd\_identifier](#input\_acd\_identifier) | A unique identifier used by the Ocean AKS Connector when importing an AKS cluster | `string` | `null` | no |
 | <a name="input_admin_username"></a> [admin\_username](#input\_admin\_username) | The username of the local administrator to be created on the Kubernetes cluster | `string` | `"azureuser"` | no |
 | <a name="input_agents_availability_zones"></a> [agents\_availability\_zones](#input\_agents\_availability\_zones) | A list of Availability Zones across which the Node Pool should be spread. Changing this forces a new resource to be created | `list(string)` | `null` | no |
-| <a name="input_agents_count"></a> [agents\_count](#input\_agents\_count) | The number of Agents that should exist in the Agent Pool | `number` | `1` | no |
+| <a name="input_agents_count"></a> [agents\_count](#input\_agents\_count) | The number of Agents that should exist in the Agent Pool. Please set `agents_count` `null` while `enable_auto_scaling` is `true` to avoid possible `agents_count` changes | `number` | `1` | no |
 | <a name="input_agents_labels"></a> [agents\_labels](#input\_agents\_labels) | A map of Kubernetes labels which should be applied to nodes in the Default Node Pool. Changing this forces a new resource to be created | `map(string)` | `{}` | no |
 | <a name="input_agents_max_count"></a> [agents\_max\_count](#input\_agents\_max\_count) | Maximum number of nodes in a pool | `number` | `null` | no |
 | <a name="input_agents_max_pods"></a> [agents\_max\_pods](#input\_agents\_max\_pods) | The maximum number of pods that can run on each agent. Changing this forces a new resource to be created | `number` | `null` | no |
@@ -94,10 +94,11 @@ module "ocean-aks" {
 | <a name="input_agents_tags"></a> [agents\_tags](#input\_agents\_tags) | A mapping of tags to assign to the Node Pool | `map(string)` | `{}` | no |
 | <a name="input_agents_taints"></a> [agents\_taints](#input\_agents\_taints) | List of additional `taint` objects, see: https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/pod#taint | `list(any)` | `[]` | no |
 | <a name="input_agents_type"></a> [agents\_type](#input\_agents\_type) | The type of Node Pool which should be created. Possible values are AvailabilitySet and VirtualMachineScaleSets. Defaults to VirtualMachineScaleSets | `string` | `"VirtualMachineScaleSets"` | no |
-| <a name="input_aks_cluster_name"></a> [aks\_cluster\_name](#input\_aks\_cluster\_name) | The AKS cluster name to be imported | `string` | `null` | no |
+| <a name="input_aks_cluster_name"></a> [aks\_cluster\_name](#input\_aks\_cluster\_name) | The name for the AKS resources created in the specified Azure Resource Group. This variable overwrites the 'prefix' var (The 'prefix' var will still be applied to the dns\_prefix if it is set) | `string` | `null` | no |
 | <a name="input_client_id"></a> [client\_id](#input\_client\_id) | The Client ID (appId) for the Service Principal used for the AKS deployment | `string` | `""` | no |
 | <a name="input_client_secret"></a> [client\_secret](#input\_client\_secret) | The Client Secret (password) for the Service Principal used for the AKS deployment | `string` | `""` | no |
 | <a name="input_cluster_identifier"></a> [cluster\_identifier](#input\_cluster\_identifier) | Cluster identifier | `string` | `null` | no |
+| <a name="input_cluster_log_analytics_workspace_name"></a> [cluster\_log\_analytics\_workspace\_name](#input\_cluster\_log\_analytics\_workspace\_name) | The name of the Analytics workspace | `string` | `null` | no |
 | <a name="input_controller_aks_connector_enabled"></a> [controller\_aks\_connector\_enabled](#input\_controller\_aks\_connector\_enabled) | Controls whether the Ocean AKS Connector should be deployed (requires a valid `acd_identifier`) | `bool` | `true` | no |
 | <a name="input_controller_base_url"></a> [controller\_base\_url](#input\_controller\_base\_url) | Base URL to be used by the HTTP client | `string` | `""` | no |
 | <a name="input_controller_disable_auto_update"></a> [controller\_disable\_auto\_update](#input\_controller\_disable\_auto\_update) | Disable the auto-update feature | `bool` | `false` | no |
@@ -110,17 +111,18 @@ module "ocean-aks" {
 | <a name="input_controller_tolerations"></a> [controller\_tolerations](#input\_controller\_tolerations) | List of additional `toleration` objects, see: https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/pod#toleration | `list(any)` | <pre>[<br>  {<br>    "effect": "NoExecute",<br>    "key": "node.kubernetes.io/not-ready",<br>    "operator": "Exists",<br>    "toleration_seconds": 150<br>  },<br>  {<br>    "effect": "NoExecute",<br>    "key": "node.kubernetes.io/unreachable",<br>    "operator": "Exists",<br>    "toleration_seconds": 150<br>  }<br>]</pre> | no |
 | <a name="input_create_aks"></a> [create\_aks](#input\_create\_aks) | Controls whether AKS cluster should be created (it affects all Azure resources) | `bool` | `true` | no |
 | <a name="input_create_ocean"></a> [create\_ocean](#input\_create\_ocean) | Controls whether Ocean should be created (it affects all Ocean resources) | `bool` | `true` | no |
-| <a name="input_enable_auto_scaling"></a> [enable\_auto\_scaling](#input\_enable\_auto\_scaling) | Enable built-in node pool autoscaling | `bool` | `false` | no |
+| <a name="input_enable_auto_scaling"></a> [enable\_auto\_scaling](#input\_enable\_auto\_scaling) | Enable AKS node pool autoscaling | `bool` | `false` | no |
 | <a name="input_enable_azure_policy"></a> [enable\_azure\_policy](#input\_enable\_azure\_policy) | Enable Azure Policy Addon | `bool` | `false` | no |
 | <a name="input_enable_http_application_routing"></a> [enable\_http\_application\_routing](#input\_enable\_http\_application\_routing) | Enable HTTP Application Routing Addon (forces recreation) | `bool` | `false` | no |
 | <a name="input_enable_kube_dashboard"></a> [enable\_kube\_dashboard](#input\_enable\_kube\_dashboard) | Enable Kubernetes Dashboard | `bool` | `false` | no |
-| <a name="input_enable_log_analytics_workspace"></a> [enable\_log\_analytics\_workspace](#input\_enable\_log\_analytics\_workspace) | Enable the creation of azurerm\_log\_analytics\_workspace and azurerm\_log\_analytics\_solution | `bool` | `true` | no |
+| <a name="input_enable_log_analytics_workspace"></a> [enable\_log\_analytics\_workspace](#input\_enable\_log\_analytics\_workspace) | Enable the creation of azurerm\_log\_analytics\_workspace and azurerm\_log\_analytics\_solution or not | `bool` | `true` | no |
 | <a name="input_enable_node_public_ip"></a> [enable\_node\_public\_ip](#input\_enable\_node\_public\_ip) | Should nodes in this Node Pool have a Public IP Address? Defaults to false | `bool` | `false` | no |
 | <a name="input_enable_role_based_access_control"></a> [enable\_role\_based\_access\_control](#input\_enable\_role\_based\_access\_control) | Enable Role Based Access Control | `bool` | `false` | no |
 | <a name="input_headroom_cpu_per_unit"></a> [headroom\_cpu\_per\_unit](#input\_headroom\_cpu\_per\_unit) | Configure the number of CPUs to allocate for the headroom (CPUs are denoted in millicores, where 1000 millicores = 1 vCPU) | `number` | `null` | no |
 | <a name="input_headroom_gpu_per_unit"></a> [headroom\_gpu\_per\_unit](#input\_headroom\_gpu\_per\_unit) | Configure the number of GPUs to allocate for the headroom | `number` | `null` | no |
 | <a name="input_headroom_memory_per_unit"></a> [headroom\_memory\_per\_unit](#input\_headroom\_memory\_per\_unit) | Configure the amount of memory (MiB) to allocate the headroom | `number` | `null` | no |
 | <a name="input_headroom_num_of_units"></a> [headroom\_num\_of\_units](#input\_headroom\_num\_of\_units) | The number of headroom units to maintain, where each unit has the defined CPU, memory, and GPU | `number` | `null` | no |
+| <a name="input_identity_type"></a> [identity\_type](#input\_identity\_type) | The type of identity used for the managed cluster. Conflict with `client_id` and `client_secret`. Possible values are `SystemAssigned` and `UserAssigned`. If `UserAssigned` is set, a `user_assigned_identity_id` must be set as well | `string` | `"SystemAssigned"` | no |
 | <a name="input_kubernetes_version"></a> [kubernetes\_version](#input\_kubernetes\_version) | Specify which Kubernetes release to use. The default used is the latest Kubernetes version available in the region | `string` | `null` | no |
 | <a name="input_log_analytics_workspace_sku"></a> [log\_analytics\_workspace\_sku](#input\_log\_analytics\_workspace\_sku) | The SKU (pricing level) of the Log Analytics workspace. For new subscriptions the SKU should be set to PerGB2018 | `string` | `"PerGB2018"` | no |
 | <a name="input_log_retention_in_days"></a> [log\_retention\_in\_days](#input\_log\_retention\_in\_days) | The retention period for the logs in days | `number` | `30` | no |
@@ -142,11 +144,12 @@ module "ocean-aks" {
 | <a name="input_rbac_aad_managed"></a> [rbac\_aad\_managed](#input\_rbac\_aad\_managed) | Is the Azure Active Directory integration Managed, meaning that Azure will create/manage the Service Principal used for integration | `bool` | `false` | no |
 | <a name="input_rbac_aad_server_app_id"></a> [rbac\_aad\_server\_app\_id](#input\_rbac\_aad\_server\_app\_id) | The Server ID of an Azure Active Directory Application | `string` | `null` | no |
 | <a name="input_rbac_aad_server_app_secret"></a> [rbac\_aad\_server\_app\_secret](#input\_rbac\_aad\_server\_app\_secret) | The Server Secret of an Azure Active Directory Application | `string` | `null` | no |
-| <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The Resource Group name to be imported | `string` | n/a | yes |
+| <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The resource group name to be imported | `string` | n/a | yes |
 | <a name="input_sku_tier"></a> [sku\_tier](#input\_sku\_tier) | The SKU Tier that should be used for this Kubernetes Cluster. Possible values are Free and Paid | `string` | `"Free"` | no |
 | <a name="input_spotinst_account"></a> [spotinst\_account](#input\_spotinst\_account) | Spot account ID | `string` | n/a | yes |
 | <a name="input_spotinst_token"></a> [spotinst\_token](#input\_spotinst\_token) | Spot Personal Access token | `string` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | Any tags that should be present on the Virtual Network resources | `map(string)` | `{}` | no |
+| <a name="input_user_assigned_identity_id"></a> [user\_assigned\_identity\_id](#input\_user\_assigned\_identity\_id) | The ID of a user assigned identity | `string` | `null` | no |
 | <a name="input_vnet_subnet_id"></a> [vnet\_subnet\_id](#input\_vnet\_subnet\_id) | The ID of a Subnet where the Kubernetes Node Pool should exist. Changing this forces a new resource to be created | `string` | `null` | no |
 
 ## Outputs

@@ -2,12 +2,18 @@
 
 variable "resource_group_name" {
   type        = string
-  description = "The Resource Group name to be imported"
+  description = "The resource group name to be imported"
 }
 
 variable "aks_cluster_name" {
   type        = string
-  description = "The AKS cluster name to be imported"
+  description = "The name for the AKS resources created in the specified Azure Resource Group. This variable overwrites the 'prefix' var (The 'prefix' var will still be applied to the dns_prefix if it is set)"
+  default     = null
+}
+
+variable "cluster_log_analytics_workspace_name" {
+  type        = string
+  description = "The name of the Analytics workspace"
   default     = null
 }
 
@@ -55,7 +61,7 @@ variable "log_retention_in_days" {
 
 variable "agents_count" {
   type        = number
-  description = "The number of Agents that should exist in the Agent Pool"
+  description = "The number of Agents that should exist in the Agent Pool. Please set `agents_count` `null` while `enable_auto_scaling` is `true` to avoid possible `agents_count` changes"
   default     = 1
 }
 
@@ -73,7 +79,7 @@ variable "tags" {
 
 variable "enable_log_analytics_workspace" {
   type        = bool
-  description = "Enable the creation of azurerm_log_analytics_workspace and azurerm_log_analytics_solution"
+  description = "Enable the creation of azurerm_log_analytics_workspace and azurerm_log_analytics_solution or not"
   default     = true
 }
 
@@ -217,7 +223,7 @@ variable "orchestrator_version" {
 
 variable "enable_auto_scaling" {
   type        = bool
-  description = "Enable built-in node pool autoscaling"
+  description = "Enable AKS node pool autoscaling"
   default     = false
 }
 
@@ -278,6 +284,18 @@ variable "agents_tags" {
 variable "agents_max_pods" {
   type        = number
   description = "The maximum number of pods that can run on each agent. Changing this forces a new resource to be created"
+  default     = null
+}
+
+variable "identity_type" {
+  type        = string
+  description = "The type of identity used for the managed cluster. Conflict with `client_id` and `client_secret`. Possible values are `SystemAssigned` and `UserAssigned`. If `UserAssigned` is set, a `user_assigned_identity_id` must be set as well"
+  default     = "SystemAssigned"
+}
+
+variable "user_assigned_identity_id" {
+  type        = string
+  description = "The ID of a user assigned identity"
   default     = null
 }
 

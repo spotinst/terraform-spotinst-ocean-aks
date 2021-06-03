@@ -2,14 +2,14 @@
 // Use of this source code is governed by an MIT license that
 // can be found in the LICENSE file.
 
-// Code copied from @Azure/terraform-azurerm-aks (v4.8.0). DO NOT EDIT.
+// Code copied from @Azure/terraform-azurerm-aks (v4.12.0). DO NOT EDIT.
 
 data "azurerm_resource_group" "main" {
   name = var.resource_group_name
 }
 
 resource "azurerm_kubernetes_cluster" "main" {
-  name                    = "${var.prefix}-aks"
+  name                    = var.cluster_name == null ? "${var.prefix}-aks" : var.cluster_name
   kubernetes_version      = var.kubernetes_version
   location                = data.azurerm_resource_group.main.location
   resource_group_name     = data.azurerm_resource_group.main.name
@@ -77,7 +77,8 @@ resource "azurerm_kubernetes_cluster" "main" {
   dynamic "identity" {
     for_each = var.client_id == "" || var.client_secret == "" ? ["identity"] : []
     content {
-      type = "SystemAssigned"
+      type                      = var.identity_type
+      user_assigned_identity_id = var.user_assigned_identity_id
     }
   }
 
@@ -138,7 +139,7 @@ resource "azurerm_kubernetes_cluster" "main" {
 
 resource "azurerm_log_analytics_workspace" "main" {
   count               = var.enable_log_analytics_workspace ? 1 : 0
-  name                = "${var.prefix}-workspace"
+  name                = var.cluster_log_analytics_workspace_name == null ? "${var.prefix}-workspace" : var.cluster_log_analytics_workspace_name
   location            = data.azurerm_resource_group.main.location
   resource_group_name = var.resource_group_name
   sku                 = var.log_analytics_workspace_sku
@@ -162,5 +163,3 @@ resource "azurerm_log_analytics_solution" "main" {
 
   tags = var.tags
 }
-
-

@@ -24,13 +24,13 @@ To provision this example, run the following from within this directory:
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~> 2.55 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 2.60.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_ocean-aks"></a> [ocean-aks](#module\_ocean-aks) | ../../ |  |
+| <a name="module_ocean-aks"></a> [ocean-aks](#module\_ocean-aks) | ../../ | n/a |
 
 ## Resources
 

@@ -2,7 +2,7 @@
 // Use of this source code is governed by an MIT license that
 // can be found in the LICENSE file.
 
-// Code copied from @Azure/terraform-azurerm-aks (v4.8.0). DO NOT EDIT.
+// Code copied from @Azure/terraform-azurerm-aks (v4.12.0). DO NOT EDIT.
 
 output "client_key" {
   value = azurerm_kubernetes_cluster.main.kube_config[0].client_key
@@ -41,7 +41,8 @@ output "aks_id" {
 }
 
 output "kube_config_raw" {
-  value = azurerm_kubernetes_cluster.main.kube_config_raw
+  sensitive = true
+  value     = azurerm_kubernetes_cluster.main.kube_config_raw
 }
 
 output "http_application_routing_zone_name" {

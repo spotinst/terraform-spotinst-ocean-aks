@@ -43,6 +43,11 @@ To provision this example, run the following from within this directory:
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_aks_cluster_name"></a> [aks\_cluster\_name](#input\_aks\_cluster\_name) | The AKS cluster name to be imported | `string` | n/a | yes |
+| <a name="input_node_pools"></a> [node\_pools](#input\_node\_pools) | List of maps containing node pools to be imported as Ocean Virtual Node Groups | `list(map(string))` | n/a | yes |
+| <a name="input_node_pools_headrooms"></a> [node\_pools\_headrooms](#input\_node\_pools\_headrooms) | Map of maps containing headroom configuration by node pool name | `map(map(string))` | n/a | yes |
+| <a name="input_node_pools_labels"></a> [node\_pools\_labels](#input\_node\_pools\_labels) | Map of maps containing node labels by node pool name | `map(map(string))` | n/a | yes |
+| <a name="input_node_pools_tags"></a> [node\_pools\_tags](#input\_node\_pools\_tags) | Map of maps containing node tags by node pool name | `map(map(string))` | n/a | yes |
+| <a name="input_node_pools_taints"></a> [node\_pools\_taints](#input\_node\_pools\_taints) | Map of lists containing node taints by node pool name | `map(list(object({ key = string, value = string, effect = string })))` | n/a | yes |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The Resource Group name to be imported | `string` | n/a | yes |
 | <a name="input_spotinst_account"></a> [spotinst\_account](#input\_spotinst\_account) | Spot account ID | `string` | n/a | yes |
 | <a name="input_spotinst_token"></a> [spotinst\_token](#input\_spotinst\_token) | Spot Personal Access token | `string` | n/a | yes |

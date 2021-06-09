@@ -1,24 +1,37 @@
-resource "spotinst_ocean_aks" "this" {
+resource "spotinst_ocean_aks" "cluster" {
   count      = var.create_ocean ? 1 : 0
   depends_on = [module.ocean-controller]
 
-  name                    = local.ocean_cluster_name
+  name                    = local.aks_cluster_name
   controller_cluster_id   = local.ocean_controller_cluster_id
   acd_identifier          = local.ocean_acd_identifier
-  aks_name                = local.ocean_cluster_name
+  aks_name                = local.aks_cluster_name
   ssh_public_key          = local.public_ssh_key
   user_name               = local.username
   aks_resource_group_name = var.resource_group_name
 }
 
-resource "spotinst_ocean_aks_virtual_node_group" "this" {
-  count = var.create_ocean ? 1 : 0
+data "azurerm_kubernetes_cluster_node_pool" "nodepool" {
+  count      = var.create_ocean && length(local.node_pool_names) > 0 ? length(local.node_pool_names) : 0
+  depends_on = [module.aks]
 
-  name     = var.agents_pool_name
-  ocean_id = spotinst_ocean_aks.this[count.index].id
+  resource_group_name     = var.resource_group_name
+  kubernetes_cluster_name = local.aks_cluster_name
+  name                    = local.node_pool_names[count.index]
+}
+
+resource "spotinst_ocean_aks_virtual_node_group" "nodepool" {
+  count = var.create_ocean && length(local.node_pool_names) > 0 ? length(local.node_pool_names) : 0
+
+  name     = local.node_pool_names[count.index]
+  ocean_id = spotinst_ocean_aks.cluster.*.id[0]
 
   dynamic "label" {
-    for_each = var.agents_labels
+    for_each = merge(
+      data.azurerm_kubernetes_cluster_node_pool.nodepool[count.index].node_labels,
+      lookup(var.node_pools_labels, "all", {}),
+      lookup(var.node_pools_labels, local.node_pool_names[count.index], {}),
+    )
 
     content {
       key   = label.key
@@ -27,7 +40,11 @@ resource "spotinst_ocean_aks_virtual_node_group" "this" {
   }
 
   dynamic "taint" {
-    for_each = var.agents_taints
+    for_each = flatten(concat(
+      data.azurerm_kubernetes_cluster_node_pool.nodepool[count.index].node_taints,
+      lookup(var.node_pools_taints, "all", []),
+      lookup(var.node_pools_taints, local.node_pool_names[count.index], []),
+    ))
 
     content {
       key    = lookup(taint.value, "key", null)
@@ -37,25 +54,33 @@ resource "spotinst_ocean_aks_virtual_node_group" "this" {
   }
 
   dynamic "resource_limits" {
-    for_each = var.agents_max_count != null ? ["resource_limits"] : []
+    for_each = data.azurerm_kubernetes_cluster_node_pool.nodepool.*.max_count[count.index] > 0 ? ["resource_limits"] : []
 
     content {
-      max_instance_count = var.agents_max_count
+      max_instance_count = data.azurerm_kubernetes_cluster_node_pool.nodepool.*.max_count[count.index]
     }
   }
 
   dynamic "autoscale" {
-    for_each = local.ocean_headroom ? ["autoscale"] : []
+    for_each = length(merge(
+      lookup(var.node_pools_headrooms, "all", {}),
+      lookup(var.node_pools_headrooms, local.node_pool_names[count.index], {}),
+    )) > 0 ? ["autoscale"] : []
 
     content {
       dynamic "autoscale_headroom" {
-        for_each = local.ocean_headroom ? ["autoscale_headroom"] : []
+        for_each = [
+          merge(
+            lookup(var.node_pools_headrooms, "all", {}),
+            lookup(var.node_pools_headrooms, local.node_pool_names[count.index], {}),
+          )
+        ]
 
         content {
-          cpu_per_unit    = var.headroom_cpu_per_unit
-          gpu_per_unit    = var.headroom_gpu_per_unit
-          memory_per_unit = var.headroom_memory_per_unit
-          num_of_units    = var.headroom_num_of_units
+          cpu_per_unit    = lookup(autoscale_headroom.value, "cpu_per_unit", null)
+          gpu_per_unit    = lookup(autoscale_headroom.value, "gpu_per_unit", null)
+          memory_per_unit = lookup(autoscale_headroom.value, "memory_per_unit", null)
+          num_of_units    = lookup(autoscale_headroom.value, "num_of_units", null)
         }
       }
     }
@@ -63,12 +88,16 @@ resource "spotinst_ocean_aks_virtual_node_group" "this" {
 
   launch_specification {
     os_disk {
-      size_gb = var.os_disk_size_gb
-      type    = var.os_disk_type
+      size_gb = data.azurerm_kubernetes_cluster_node_pool.nodepool[count.index].os_disk_size_gb
+      type    = var.os_disk_type # see: https://github.com/Azure/AKS/issues/580
     }
 
     dynamic "tag" {
-      for_each = var.agents_tags
+      for_each = merge(
+        data.azurerm_kubernetes_cluster_node_pool.nodepool[count.index].tags,
+        lookup(var.node_pools_tags, "all", {}),
+        lookup(var.node_pools_tags, local.node_pool_names[count.index], {}),
+      )
 
       content {
         key   = tag.key

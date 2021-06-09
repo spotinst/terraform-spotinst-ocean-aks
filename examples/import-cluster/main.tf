@@ -33,4 +33,12 @@ module "ocean-aks" {
   # Configuration.
   resource_group_name = var.resource_group_name
   aks_cluster_name    = var.aks_cluster_name
+  node_pools          = var.node_pools
+
+  # Optional configuration to be applied to each node pool during
+  # the creation of its corresponding Ocean Virtual Node Group.
+  node_pools_labels    = var.node_pools_labels
+  node_pools_taints    = var.node_pools_taints
+  node_pools_tags      = var.node_pools_tags
+  node_pools_headrooms = var.node_pools_headrooms
 }

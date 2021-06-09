@@ -1,5 +1,5 @@
 locals {
-  ocean_cluster_name = (
+  aks_cluster_name = (
     var.aks_cluster_name == null
     ? "${var.prefix}-aks"
     : var.aks_cluster_name
@@ -7,27 +7,20 @@ locals {
 
   ocean_cluster_id = (
     var.create_ocean
-    ? spotinst_ocean_aks.this[0].id
+    ? spotinst_ocean_aks.cluster[0].id
     : null
   )
 
   ocean_controller_cluster_id = (
     var.cluster_identifier != null
     ? var.cluster_identifier
-    : local.ocean_cluster_name
+    : local.aks_cluster_name
   )
 
   ocean_acd_identifier = (
     var.acd_identifier != null
     ? var.acd_identifier
-    : local.ocean_cluster_name
-  )
-
-  ocean_headroom = (
-    var.headroom_cpu_per_unit != null ||
-    var.headroom_gpu_per_unit != null ||
-    var.headroom_memory_per_unit != null ||
-    var.headroom_num_of_units != null
+    : local.aks_cluster_name
   )
 
   public_ssh_key = (replace(
@@ -43,5 +36,24 @@ locals {
       ? module.aks[0].admin_username
       : module.aks[0].username
     ) : var.admin_username
+  )
+
+  agents_labels = merge(
+    lookup(var.node_pools_labels, "all", {}),
+    lookup(var.node_pools_labels, var.agents_pool_name, {}),
+  )
+
+  agents_tags = merge(
+    lookup(var.node_pools_tags, "all", {}),
+    lookup(var.node_pools_tags, var.agents_pool_name, {}),
+  )
+
+  node_pool_names = (
+    [for np in toset(var.node_pools) : np.name]
+  )
+
+  node_pools = zipmap(
+    local.node_pool_names,
+    tolist(toset(var.node_pools))
   )
 }

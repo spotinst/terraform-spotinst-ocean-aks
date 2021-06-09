@@ -60,6 +60,7 @@ module "ocean-aks" {
 
 | Name | Version |
 |------|---------|
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 2.60.0 |
 | <a name="provider_spotinst"></a> [spotinst](#provider\_spotinst) | 1.44.0 |
 
 ## Modules
@@ -74,8 +75,9 @@ module "ocean-aks" {
 
 | Name | Type |
 |------|------|
-| [spotinst_ocean_aks.this](https://registry.terraform.io/providers/spotinst/spotinst/latest/docs/resources/ocean_aks) | resource |
-| [spotinst_ocean_aks_virtual_node_group.this](https://registry.terraform.io/providers/spotinst/spotinst/latest/docs/resources/ocean_aks_virtual_node_group) | resource |
+| [spotinst_ocean_aks.cluster](https://registry.terraform.io/providers/spotinst/spotinst/latest/docs/resources/ocean_aks) | resource |
+| [spotinst_ocean_aks_virtual_node_group.nodepool](https://registry.terraform.io/providers/spotinst/spotinst/latest/docs/resources/ocean_aks_virtual_node_group) | resource |
+| [azurerm_kubernetes_cluster_node_pool.nodepool](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/kubernetes_cluster_node_pool) | data source |
 
 ## Inputs
 
@@ -85,14 +87,11 @@ module "ocean-aks" {
 | <a name="input_admin_username"></a> [admin\_username](#input\_admin\_username) | The username of the local administrator to be created on the Kubernetes cluster | `string` | `"azureuser"` | no |
 | <a name="input_agents_availability_zones"></a> [agents\_availability\_zones](#input\_agents\_availability\_zones) | A list of Availability Zones across which the Node Pool should be spread. Changing this forces a new resource to be created | `list(string)` | `null` | no |
 | <a name="input_agents_count"></a> [agents\_count](#input\_agents\_count) | The number of Agents that should exist in the Agent Pool. Please set `agents_count` `null` while `enable_auto_scaling` is `true` to avoid possible `agents_count` changes | `number` | `1` | no |
-| <a name="input_agents_labels"></a> [agents\_labels](#input\_agents\_labels) | A map of Kubernetes labels which should be applied to nodes in the Default Node Pool. Changing this forces a new resource to be created | `map(string)` | `{}` | no |
 | <a name="input_agents_max_count"></a> [agents\_max\_count](#input\_agents\_max\_count) | Maximum number of nodes in a pool | `number` | `null` | no |
 | <a name="input_agents_max_pods"></a> [agents\_max\_pods](#input\_agents\_max\_pods) | The maximum number of pods that can run on each agent. Changing this forces a new resource to be created | `number` | `null` | no |
 | <a name="input_agents_min_count"></a> [agents\_min\_count](#input\_agents\_min\_count) | Minimum number of nodes in a pool | `number` | `null` | no |
 | <a name="input_agents_pool_name"></a> [agents\_pool\_name](#input\_agents\_pool\_name) | The default Azure AKS agentpool (nodepool) name | `string` | `"nodepool"` | no |
 | <a name="input_agents_size"></a> [agents\_size](#input\_agents\_size) | The default virtual machine size for the Kubernetes agents | `string` | `"Standard_D2s_v3"` | no |
-| <a name="input_agents_tags"></a> [agents\_tags](#input\_agents\_tags) | A mapping of tags to assign to the Node Pool | `map(string)` | `{}` | no |
-| <a name="input_agents_taints"></a> [agents\_taints](#input\_agents\_taints) | List of additional `taint` objects, see: https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/pod#taint | `list(any)` | `[]` | no |
 | <a name="input_agents_type"></a> [agents\_type](#input\_agents\_type) | The type of Node Pool which should be created. Possible values are AvailabilitySet and VirtualMachineScaleSets. Defaults to VirtualMachineScaleSets | `string` | `"VirtualMachineScaleSets"` | no |
 | <a name="input_aks_cluster_name"></a> [aks\_cluster\_name](#input\_aks\_cluster\_name) | The name for the AKS resources created in the specified Azure Resource Group. This variable overwrites the 'prefix' var (The 'prefix' var will still be applied to the dns\_prefix if it is set) | `string` | `null` | no |
 | <a name="input_client_id"></a> [client\_id](#input\_client\_id) | The Client ID (appId) for the Service Principal used for the AKS deployment | `string` | `""` | no |
@@ -118,10 +117,6 @@ module "ocean-aks" {
 | <a name="input_enable_log_analytics_workspace"></a> [enable\_log\_analytics\_workspace](#input\_enable\_log\_analytics\_workspace) | Enable the creation of azurerm\_log\_analytics\_workspace and azurerm\_log\_analytics\_solution or not | `bool` | `true` | no |
 | <a name="input_enable_node_public_ip"></a> [enable\_node\_public\_ip](#input\_enable\_node\_public\_ip) | Should nodes in this Node Pool have a Public IP Address? Defaults to false | `bool` | `false` | no |
 | <a name="input_enable_role_based_access_control"></a> [enable\_role\_based\_access\_control](#input\_enable\_role\_based\_access\_control) | Enable Role Based Access Control | `bool` | `false` | no |
-| <a name="input_headroom_cpu_per_unit"></a> [headroom\_cpu\_per\_unit](#input\_headroom\_cpu\_per\_unit) | Configure the number of CPUs to allocate for the headroom (CPUs are denoted in millicores, where 1000 millicores = 1 vCPU) | `number` | `null` | no |
-| <a name="input_headroom_gpu_per_unit"></a> [headroom\_gpu\_per\_unit](#input\_headroom\_gpu\_per\_unit) | Configure the number of GPUs to allocate for the headroom | `number` | `null` | no |
-| <a name="input_headroom_memory_per_unit"></a> [headroom\_memory\_per\_unit](#input\_headroom\_memory\_per\_unit) | Configure the amount of memory (MiB) to allocate the headroom | `number` | `null` | no |
-| <a name="input_headroom_num_of_units"></a> [headroom\_num\_of\_units](#input\_headroom\_num\_of\_units) | The number of headroom units to maintain, where each unit has the defined CPU, memory, and GPU | `number` | `null` | no |
 | <a name="input_identity_type"></a> [identity\_type](#input\_identity\_type) | The type of identity used for the managed cluster. Conflict with `client_id` and `client_secret`. Possible values are `SystemAssigned` and `UserAssigned`. If `UserAssigned` is set, a `user_assigned_identity_id` must be set as well | `string` | `"SystemAssigned"` | no |
 | <a name="input_kubernetes_version"></a> [kubernetes\_version](#input\_kubernetes\_version) | Specify which Kubernetes release to use. The default used is the latest Kubernetes version available in the region | `string` | `null` | no |
 | <a name="input_log_analytics_workspace_sku"></a> [log\_analytics\_workspace\_sku](#input\_log\_analytics\_workspace\_sku) | The SKU (pricing level) of the Log Analytics workspace. For new subscriptions the SKU should be set to PerGB2018 | `string` | `"PerGB2018"` | no |
@@ -133,6 +128,11 @@ module "ocean-aks" {
 | <a name="input_net_profile_service_cidr"></a> [net\_profile\_service\_cidr](#input\_net\_profile\_service\_cidr) | The Network Range used by the Kubernetes service. Changing this forces a new resource to be created | `string` | `null` | no |
 | <a name="input_network_plugin"></a> [network\_plugin](#input\_network\_plugin) | Network plugin to use for networking | `string` | `"kubenet"` | no |
 | <a name="input_network_policy"></a> [network\_policy](#input\_network\_policy) | Sets up network policy to be used with Azure CNI. Network policy allows us to control the traffic flow between pods. Currently supported values are calico and azure. Changing this forces a new resource to be created | `string` | `null` | no |
+| <a name="input_node_pools"></a> [node\_pools](#input\_node\_pools) | List of maps containing node pools to be imported as Ocean Virtual Node Groups | `list(map(string))` | <pre>[<br>  {<br>    "name": "nodepool"<br>  }<br>]</pre> | no |
+| <a name="input_node_pools_headrooms"></a> [node\_pools\_headrooms](#input\_node\_pools\_headrooms) | Map of maps containing headroom configuration by node pool name | `map(map(string))` | <pre>{<br>  "all": {},<br>  "nodepool": {}<br>}</pre> | no |
+| <a name="input_node_pools_labels"></a> [node\_pools\_labels](#input\_node\_pools\_labels) | Map of maps containing node labels by node pool name | `map(map(string))` | <pre>{<br>  "all": {},<br>  "nodepool": {}<br>}</pre> | no |
+| <a name="input_node_pools_tags"></a> [node\_pools\_tags](#input\_node\_pools\_tags) | Map of maps containing node tags by node pool name | `map(map(string))` | <pre>{<br>  "all": {},<br>  "nodepool": {}<br>}</pre> | no |
+| <a name="input_node_pools_taints"></a> [node\_pools\_taints](#input\_node\_pools\_taints) | Map of lists containing node taints by node pool name | `map(list(object({ key = string, value = string, effect = string })))` | <pre>{<br>  "all": [],<br>  "nodepool": []<br>}</pre> | no |
 | <a name="input_orchestrator_version"></a> [orchestrator\_version](#input\_orchestrator\_version) | Specify which Kubernetes release to use for the orchestration layer. The default used is the latest Kubernetes version available in the region | `string` | `null` | no |
 | <a name="input_os_disk_size_gb"></a> [os\_disk\_size\_gb](#input\_os\_disk\_size\_gb) | Disk size of nodes in GBs | `number` | `50` | no |
 | <a name="input_os_disk_type"></a> [os\_disk\_type](#input\_os\_disk\_type) | Disk type of nodes | `string` | `"Standard_LRS"` | no |

@@ -87,7 +87,7 @@ output "ocean_cluster_id" {
 
 output "ocean_cluster_name" {
   description = "The name of the Ocean cluster"
-  value       = var.create_ocean ? local.ocean_cluster_name : null
+  value       = var.create_ocean ? local.aks_cluster_name : null
 }
 
 output "ocean_controller_cluster_id" {

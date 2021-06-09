@@ -5,13 +5,13 @@ module "aks" {
   admin_username                       = var.admin_username
   agents_availability_zones            = var.agents_availability_zones
   agents_count                         = var.agents_count
-  agents_labels                        = var.agents_labels
+  agents_labels                        = local.agents_labels
   agents_max_count                     = var.agents_max_count
   agents_max_pods                      = var.agents_max_pods
   agents_min_count                     = var.agents_min_count
   agents_pool_name                     = var.agents_pool_name
   agents_size                          = var.agents_size
-  agents_tags                          = var.agents_tags
+  agents_tags                          = local.agents_tags
   agents_type                          = var.agents_type
   client_id                            = var.client_id
   client_secret                        = var.client_secret
@@ -39,6 +39,7 @@ module "aks" {
   os_disk_size_gb                      = var.os_disk_size_gb
   prefix                               = var.prefix
   private_cluster_enabled              = var.private_cluster_enabled
+  public_ssh_key                       = local.public_ssh_key
   rbac_aad_admin_group_object_ids      = var.rbac_aad_admin_group_object_ids
   rbac_aad_client_app_id               = var.rbac_aad_client_app_id
   rbac_aad_managed                     = var.rbac_aad_managed
@@ -49,5 +50,4 @@ module "aks" {
   tags                                 = var.tags
   user_assigned_identity_id            = var.user_assigned_identity_id
   vnet_subnet_id                       = var.vnet_subnet_id
-  public_ssh_key                       = local.public_ssh_key
 }

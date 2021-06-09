@@ -257,28 +257,10 @@ variable "agents_availability_zones" {
   default     = null
 }
 
-variable "agents_labels" {
-  type        = map(string)
-  description = "A map of Kubernetes labels which should be applied to nodes in the Default Node Pool. Changing this forces a new resource to be created"
-  default     = {}
-}
-
-variable "agents_taints" {
-  type        = list(any)
-  description = "List of additional `taint` objects, see: https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/pod#taint"
-  default     = []
-}
-
 variable "agents_type" {
   type        = string
   description = "The type of Node Pool which should be created. Possible values are AvailabilitySet and VirtualMachineScaleSets. Defaults to VirtualMachineScaleSets"
   default     = "VirtualMachineScaleSets"
-}
-
-variable "agents_tags" {
-  type        = map(string)
-  description = "A mapping of tags to assign to the Node Pool"
-  default     = {}
 }
 
 variable "agents_max_pods" {
@@ -337,28 +319,50 @@ variable "cluster_identifier" {
   default     = null
 }
 
-variable "headroom_cpu_per_unit" {
-  type        = number
-  description = "Configure the number of CPUs to allocate for the headroom (CPUs are denoted in millicores, where 1000 millicores = 1 vCPU)"
-  default     = null
+variable "node_pools" {
+  type        = list(map(string))
+  description = "List of maps containing node pools to be imported as Ocean Virtual Node Groups"
+  default = [
+    {
+      name = "nodepool", // default system node pool
+    },
+  ]
 }
 
-variable "headroom_gpu_per_unit" {
-  type        = number
-  description = "Configure the number of GPUs to allocate for the headroom"
-  default     = null
+variable "node_pools_labels" {
+  type        = map(map(string))
+  description = "Map of maps containing node labels by node pool name"
+  default = {
+    all      = {}
+    nodepool = {}
+  }
 }
 
-variable "headroom_memory_per_unit" {
-  type        = number
-  description = "Configure the amount of memory (MiB) to allocate the headroom"
-  default     = null
+variable "node_pools_taints" {
+  type        = map(list(object({ key = string, value = string, effect = string })))
+  description = "Map of lists containing node taints by node pool name"
+  default = {
+    all      = []
+    nodepool = []
+  }
 }
 
-variable "headroom_num_of_units" {
-  type        = number
-  description = "The number of headroom units to maintain, where each unit has the defined CPU, memory, and GPU"
-  default     = null
+variable "node_pools_tags" {
+  type        = map(map(string))
+  description = "Map of maps containing node tags by node pool name"
+  default = {
+    all      = {}
+    nodepool = {}
+  }
+}
+
+variable "node_pools_headrooms" {
+  type        = map(map(string))
+  description = "Map of maps containing headroom configuration by node pool name"
+  default = {
+    all      = {},
+    nodepool = {},
+  }
 }
 
 // endregion

@@ -3,9 +3,16 @@
 
 
 
-<a name="v1.1.0"></a>
-## [v1.1.0] (January 1, 0001)
+<a name="v2.1.0"></a>
+## [v2.1.0] (January 1, 0001)
 
+
+
+<a name="v2.0.0"></a>
+## [v2.0.0] (July 15, 2021)
+
+- feat: allow kubelet identity to manage aks resources
+- docs(changelog): v1.0.0
 
 
 <a name="v1.0.0"></a>
@@ -44,8 +51,9 @@
 - chore: initial commit
 
 
-[Unreleased]: https://github.com/spotinst/terraform-spotinst-ocean-gke/compare/v1.1.0...HEAD
-[v1.1.0]: https://github.com/spotinst/terraform-spotinst-ocean-gke/compare/v1.0.0...v1.1.0
+[Unreleased]: https://github.com/spotinst/terraform-spotinst-ocean-gke/compare/v2.1.0...HEAD
+[v2.1.0]: https://github.com/spotinst/terraform-spotinst-ocean-gke/compare/v2.0.0...v2.1.0
+[v2.0.0]: https://github.com/spotinst/terraform-spotinst-ocean-gke/compare/v1.0.0...v2.0.0
 [v1.0.0]: https://github.com/spotinst/terraform-spotinst-ocean-gke/compare/v0.4.0...v1.0.0
 [v0.4.0]: https://github.com/spotinst/terraform-spotinst-ocean-gke/compare/v0.3.0...v0.4.0
 [v0.3.0]: https://github.com/spotinst/terraform-spotinst-ocean-gke/compare/v0.2.0...v0.3.0

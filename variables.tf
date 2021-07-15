@@ -281,6 +281,12 @@ variable "user_assigned_identity_id" {
   default     = null
 }
 
+variable "user_assigned_identity_name" {
+  type        = string
+  description = "The name of a user assigned identity"
+  default     = null
+}
+
 // endregion
 
 // region spotinst/ocean-aks
@@ -365,9 +371,21 @@ variable "node_pools_headrooms" {
   }
 }
 
+variable "kubelet_assign_role" {
+  type        = string
+  description = "Name of a built-in role to assign to the Kubelet identity"
+  default     = "Contributor"
+}
+
 // endregion
 
 // region spotinst/ocean-controller
+
+variable "create_controller" {
+  type        = bool
+  description = "Controls whether the Ocean Controller should be deployed (it affects all Kubernetes resources)"
+  default     = true
+}
 
 variable "controller_image_pull_policy" {
   type        = string

@@ -54,30 +54,33 @@ module "ocean-aks" {
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.13.0 |
 | <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 2.55 |
 | <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | ~> 2.0 |
-| <a name="requirement_spotinst"></a> [spotinst](#requirement\_spotinst) | ~> 1.44 |
+| <a name="requirement_spotinst"></a> [spotinst](#requirement\_spotinst) | ~> 1.53 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 2.60.0 |
-| <a name="provider_spotinst"></a> [spotinst](#provider\_spotinst) | 1.44.0 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 2.67.0 |
+| <a name="provider_spotinst"></a> [spotinst](#provider\_spotinst) | 1.53.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_aks"></a> [aks](#module\_aks) | ./modules/aks | n/a |
-| <a name="module_ocean-controller"></a> [ocean-controller](#module\_ocean-controller) | spotinst/ocean-controller/spotinst | ~> 0.28 |
+| <a name="module_ocean-controller"></a> [ocean-controller](#module\_ocean-controller) | spotinst/ocean-controller/spotinst | ~> 0.31 |
 | <a name="module_ssh"></a> [ssh](#module\_ssh) | ./modules/ssh | n/a |
 
 ## Resources
 
 | Name | Type |
 |------|------|
+| [azurerm_role_assignment.kubelet_contributor](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) | resource |
 | [spotinst_ocean_aks.cluster](https://registry.terraform.io/providers/spotinst/spotinst/latest/docs/resources/ocean_aks) | resource |
 | [spotinst_ocean_aks_virtual_node_group.nodepool](https://registry.terraform.io/providers/spotinst/spotinst/latest/docs/resources/ocean_aks_virtual_node_group) | resource |
+| [azurerm_kubernetes_cluster.cluster](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/kubernetes_cluster) | data source |
 | [azurerm_kubernetes_cluster_node_pool.nodepool](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/kubernetes_cluster_node_pool) | data source |
+| [azurerm_resource_group.node_resource_group](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/resource_group) | data source |
 
 ## Inputs
 
@@ -109,6 +112,7 @@ module "ocean-aks" {
 | <a name="input_controller_resources_requests"></a> [controller\_resources\_requests](#input\_controller\_resources\_requests) | Definition of the minimum amount of compute resources required | `map(any)` | `null` | no |
 | <a name="input_controller_tolerations"></a> [controller\_tolerations](#input\_controller\_tolerations) | List of additional `toleration` objects, see: https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/pod#toleration | `list(any)` | <pre>[<br>  {<br>    "effect": "NoExecute",<br>    "key": "node.kubernetes.io/not-ready",<br>    "operator": "Exists",<br>    "toleration_seconds": 150<br>  },<br>  {<br>    "effect": "NoExecute",<br>    "key": "node.kubernetes.io/unreachable",<br>    "operator": "Exists",<br>    "toleration_seconds": 150<br>  }<br>]</pre> | no |
 | <a name="input_create_aks"></a> [create\_aks](#input\_create\_aks) | Controls whether AKS cluster should be created (it affects all Azure resources) | `bool` | `true` | no |
+| <a name="input_create_controller"></a> [create\_controller](#input\_create\_controller) | Controls whether the Ocean Controller should be deployed (it affects all Kubernetes resources) | `bool` | `true` | no |
 | <a name="input_create_ocean"></a> [create\_ocean](#input\_create\_ocean) | Controls whether Ocean should be created (it affects all Ocean resources) | `bool` | `true` | no |
 | <a name="input_enable_auto_scaling"></a> [enable\_auto\_scaling](#input\_enable\_auto\_scaling) | Enable AKS node pool autoscaling | `bool` | `false` | no |
 | <a name="input_enable_azure_policy"></a> [enable\_azure\_policy](#input\_enable\_azure\_policy) | Enable Azure Policy Addon | `bool` | `false` | no |
@@ -118,6 +122,7 @@ module "ocean-aks" {
 | <a name="input_enable_node_public_ip"></a> [enable\_node\_public\_ip](#input\_enable\_node\_public\_ip) | Should nodes in this Node Pool have a Public IP Address? Defaults to false | `bool` | `false` | no |
 | <a name="input_enable_role_based_access_control"></a> [enable\_role\_based\_access\_control](#input\_enable\_role\_based\_access\_control) | Enable Role Based Access Control | `bool` | `false` | no |
 | <a name="input_identity_type"></a> [identity\_type](#input\_identity\_type) | The type of identity used for the managed cluster. Conflict with `client_id` and `client_secret`. Possible values are `SystemAssigned` and `UserAssigned`. If `UserAssigned` is set, a `user_assigned_identity_id` must be set as well | `string` | `"SystemAssigned"` | no |
+| <a name="input_kubelet_assign_role"></a> [kubelet\_assign\_role](#input\_kubelet\_assign\_role) | Name of a built-in role to assign to the Kubelet identity | `string` | `"Contributor"` | no |
 | <a name="input_kubernetes_version"></a> [kubernetes\_version](#input\_kubernetes\_version) | Specify which Kubernetes release to use. The default used is the latest Kubernetes version available in the region | `string` | `null` | no |
 | <a name="input_log_analytics_workspace_sku"></a> [log\_analytics\_workspace\_sku](#input\_log\_analytics\_workspace\_sku) | The SKU (pricing level) of the Log Analytics workspace. For new subscriptions the SKU should be set to PerGB2018 | `string` | `"PerGB2018"` | no |
 | <a name="input_log_retention_in_days"></a> [log\_retention\_in\_days](#input\_log\_retention\_in\_days) | The retention period for the logs in days | `number` | `30` | no |
@@ -150,6 +155,7 @@ module "ocean-aks" {
 | <a name="input_spotinst_token"></a> [spotinst\_token](#input\_spotinst\_token) | Spot Personal Access token | `string` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | Any tags that should be present on the Virtual Network resources | `map(string)` | `{}` | no |
 | <a name="input_user_assigned_identity_id"></a> [user\_assigned\_identity\_id](#input\_user\_assigned\_identity\_id) | The ID of a user assigned identity | `string` | `null` | no |
+| <a name="input_user_assigned_identity_name"></a> [user\_assigned\_identity\_name](#input\_user\_assigned\_identity\_name) | The name of a user assigned identity | `string` | `null` | no |
 | <a name="input_vnet_subnet_id"></a> [vnet\_subnet\_id](#input\_vnet\_subnet\_id) | The ID of a Subnet where the Kubernetes Node Pool should exist. Changing this forces a new resource to be created | `string` | `null` | no |
 
 ## Outputs

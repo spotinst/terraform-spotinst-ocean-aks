@@ -1,6 +1,6 @@
 resource "spotinst_ocean_aks" "cluster" {
   count      = var.create_ocean ? 1 : 0
-  depends_on = [module.ocean-controller]
+  depends_on = [module.ocean-controller, azurerm_role_assignment.kubelet_contributor]
 
   name                    = local.aks_cluster_name
   controller_cluster_id   = local.ocean_controller_cluster_id
@@ -9,6 +9,15 @@ resource "spotinst_ocean_aks" "cluster" {
   ssh_public_key          = local.public_ssh_key
   user_name               = local.username
   aks_resource_group_name = var.resource_group_name
+
+  dynamic "managed_service_identity" {
+    for_each = var.client_id == "" || var.client_secret == "" ? ["identity"] : []
+
+    content {
+      resource_group_name = local.node_resource_group_name
+      name                = local.kubelet_identity_name
+    }
+  }
 }
 
 data "azurerm_kubernetes_cluster_node_pool" "nodepool" {
@@ -109,10 +118,10 @@ resource "spotinst_ocean_aks_virtual_node_group" "nodepool" {
 
 module "ocean-controller" {
   source     = "spotinst/ocean-controller/spotinst"
-  version    = "~> 0.28"
+  version    = "~> 0.31"
   depends_on = [module.aks]
 
-  create_controller     = var.create_ocean
+  create_controller     = var.create_controller && var.create_ocean
   spotinst_token        = var.spotinst_token
   spotinst_account      = var.spotinst_account
   aks_connector_enabled = var.controller_aks_connector_enabled

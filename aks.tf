@@ -51,3 +51,29 @@ module "aks" {
   user_assigned_identity_id            = var.user_assigned_identity_id
   vnet_subnet_id                       = var.vnet_subnet_id
 }
+
+# Get cluster location.
+data "azurerm_kubernetes_cluster" "cluster" {
+  count               = var.create_aks || var.create_ocean ? 1 : 0
+  resource_group_name = var.resource_group_name
+  name                = local.aks_cluster_name
+}
+
+# Get the ID of the node resource group (MC_xxx).
+data "azurerm_resource_group" "node_resource_group" {
+  count = var.create_aks || var.create_ocean ? 1 : 0
+  name  = local.node_resource_group_name
+}
+
+# Allow the Kubelet identity to manage AKS resources in node resource group (MC_xxx).
+resource "azurerm_role_assignment" "kubelet_contributor" {
+  count = (
+    (var.create_aks || var.create_ocean) &&
+    (var.client_id == "" || var.client_secret == "") &&
+    (var.kubelet_assign_role != "" && var.kubelet_assign_role != null)
+  ) ? 1 : 0
+
+  scope                = data.azurerm_resource_group.node_resource_group[0].id
+  principal_id         = local.kubelet_identity_object_id
+  role_definition_name = var.kubelet_assign_role
+}

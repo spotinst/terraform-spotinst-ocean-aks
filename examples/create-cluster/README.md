@@ -18,13 +18,13 @@ To provision this example, run the following from within this directory:
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.13.0 |
 | <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 2.55 |
 | <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | ~> 2.0 |
-| <a name="requirement_spotinst"></a> [spotinst](#requirement\_spotinst) | ~> 1.44 |
+| <a name="requirement_spotinst"></a> [spotinst](#requirement\_spotinst) | ~> 1.53 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 2.60.0 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 2.67.0 |
 
 ## Modules
 

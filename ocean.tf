@@ -118,7 +118,7 @@ resource "spotinst_ocean_aks_virtual_node_group" "nodepool" {
 
 module "ocean-controller" {
   source     = "spotinst/ocean-controller/spotinst"
-  version    = "~> 0.31"
+  version    = "~> 0.40"
   depends_on = [module.aks]
 
   create_controller     = var.create_controller && var.create_ocean

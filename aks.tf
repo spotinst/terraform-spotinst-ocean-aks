@@ -54,6 +54,7 @@ module "aks" {
 
 # Get cluster location.
 data "azurerm_kubernetes_cluster" "cluster" {
+  depends_on = [module.aks]
   count               = var.create_aks || var.create_ocean ? 1 : 0
   resource_group_name = var.resource_group_name
   name                = local.aks_cluster_name

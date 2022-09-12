@@ -3,9 +3,16 @@
 
 
 
-<a name="v2.1.0"></a>
-## [v2.1.0] (January 1, 0001)
+<a name="v2.2.0"></a>
+## [v2.2.0] (January 1, 0001)
 
+
+
+<a name="v2.1.0"></a>
+## [v2.1.0] (September 12, 2022)
+
+- fix(ocean): upgrade ocean-controller version ([#1](https://github.com/spotinst/terraform-spotinst-ocean-gke/issues/1))
+- docs(changelog): v2.0.0
 
 
 <a name="v2.0.0"></a>
@@ -51,7 +58,8 @@
 - chore: initial commit
 
 
-[Unreleased]: https://github.com/spotinst/terraform-spotinst-ocean-gke/compare/v2.1.0...HEAD
+[Unreleased]: https://github.com/spotinst/terraform-spotinst-ocean-gke/compare/v2.2.0...HEAD
+[v2.2.0]: https://github.com/spotinst/terraform-spotinst-ocean-gke/compare/v2.1.0...v2.2.0
 [v2.1.0]: https://github.com/spotinst/terraform-spotinst-ocean-gke/compare/v2.0.0...v2.1.0
 [v2.0.0]: https://github.com/spotinst/terraform-spotinst-ocean-gke/compare/v1.0.0...v2.0.0
 [v1.0.0]: https://github.com/spotinst/terraform-spotinst-ocean-gke/compare/v0.4.0...v1.0.0
